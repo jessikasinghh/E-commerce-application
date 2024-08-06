@@ -1,0 +1,71 @@
+<%- include('../partials/navbar') %>
+<%- include('../partials/flash') %>
+<% layout('layouts/boilerplate') %>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <form action="/products/<%=findproduct._id%>?_method=PATCH" method="POST" class="edit-product-form">
+                <div class="mb-3">
+                    <label for="naam" class="form-label">Name:</label>
+                    <input type="text" class="form-control" id="naam" name="name" value="<%= findproduct.name %>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="img" class="form-label">Image URL:</label>
+                    <input type="text" class="form-control" id="img" name="img" value='<%= findproduct.img %>' required>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price:</label>
+                    <input type="number" class="form-control" id="price" name="price" value='<%= findproduct.price %>' required>
+                </div>
+                <div class="mb-3">
+                    <label for="desc" class="form-label">Description:</label>
+                    <textarea class="form-control" rows="5" id="desc" name="desc" required><%=findproduct.desc%></textarea>
+                </div>
+                <button class="btn btn-success" type="submit">Edit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Add custom CSS styles here */
+    .edit-product-form {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .edit-product-form label {
+        font-weight: bold;
+    }
+
+    .edit-product-form input[type="text"],
+    .edit-product-form input[type="number"],
+    .edit-product-form textarea {
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    .edit-product-form textarea {
+        resize: none;
+    }
+
+    .edit-product-form button[type="submit"] {
+        background-color: #28a745;
+        border: none;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .edit-product-form button[type="submit"]:hover {
+        background-color: #218838;
+    }
+</style>
+

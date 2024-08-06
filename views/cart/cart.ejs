@@ -1,0 +1,81 @@
+<% layout('layouts/boilerplate') %>
+<%- include('../partials/navbar') %>    
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col">
+      <h1>Your Cart</h1>
+      <ul class="list-group">
+        <% for(let item of user.cart){ %>
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-6">
+                <%= item.name %>
+              </div>
+              <div class="col-4 text-right">
+                <%= item.price %>
+              </div>
+              <div class="col-2">
+                <form action="/user/<%= item._id %>/pay" method="POST">
+                  <input type="hidden" name="amount" value="<%= item.price %>">
+                  <input type="hidden" name="name" value="<%= item.name %>">
+                  <button type="submit" class="btn btn-success btn-sm">Buy Now</button>
+                </form>
+              </div>
+              <div class="col-12 text-right">
+                <!-- Use JavaScript to submit the form with DELETE method -->
+                <form id="deleteForm<%= item._id %>" action="/user/<%= item._id %>/delete" method="POST">
+                  <!-- Add a hidden input to override the method -->
+                  <input type="hidden" name="_method" value="DELETE">
+                  <button type="button" onclick="deleteItem('<%= item._id %>')" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+              </div>
+            </div>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  function deleteItem(itemId) {
+    if (confirm("Are you sure you want to delete this item?")) {
+      // Submit the form with the correct method
+      document.getElementById('deleteForm' + itemId).submit();
+    }
+  }
+</script>
+
+<style>
+  .list-group-item {
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .list-group-item:nth-child(odd) {
+    background-color: #f8f9fa;
+  }
+
+  .list-group-item .row {
+    align-items: center;
+  }
+
+  .list-group-item .col-6 {
+    padding: 0.5rem;
+  }
+
+  .list-group-item .col-6:first-child {
+    font-weight: bold;
+  }
+
+  .list-group-item .col-4.text-right {
+    color: #2f83b1; /* Green color */
+  }
+
+  .list-group-item .col-2,
+  .list-group-item .col-12 {
+    text-align: right;
+  }
+</style>

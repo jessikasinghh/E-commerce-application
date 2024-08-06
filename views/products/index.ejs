@@ -1,0 +1,121 @@
+<%- include('../partials/navbar') %>
+<%- include('../partials/flash') %>
+<% layout('layouts/boilerplate') %>
+
+<div class="container mt-4">
+    <div class="row">
+        <% for (let item of products) { %>
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="<%= item.img %>" class="card-img-top" alt="<%= item.name %>">
+                    <div class="card-body">
+                        <h3 class="card-title"><%= item.name %></h3>
+                        <h5 class="card-title">Rs. <%= item.price.toFixed(2) %></h5>
+                        <p class="card-text"><%= item.desc %></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="/products/<%= item._id %>" class="btn btn-primary btn-sm">View Details</a>
+                            <form action="/products/<%= item._id %>?_method=DELETE" method="POST" class="mt-2">
+                                <button class="btn btn-danger btn-sm">Remove</button>
+                            </form>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .card-text {
+        color: #6c757d;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    .btn-success {
+        background-color: #3984da;
+        border-color: #3984da;
+    }
+
+    .btn-success:hover {
+        background-color: #1a5291;
+        border-color: #1a5291;
+    }
+
+    .btn-danger {
+        background-color: #1a5291;
+        border-color: #1a5291;
+    }
+
+    .btn-danger:hover {
+        background-color: #3984da;
+        border-color: #3984da;
+    }
+</style>
+
+
+
+
+
+
+<!-- 
+<% layout('layouts/boilerplate') -%>
+
+<section class="container">
+
+
+  <%- include('../partials/flash')  %> 
+  
+  <section id="heading"> 
+    <h4 class="display-4"><i class="fab fa-shopify" style="margin-right: 20px;"></i>Shopping-Cart</h4>
+  </section>
+  <div class="row products">
+      <%for(let product of products){%>
+          <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card shadow-sm mx-auto position-relative" style="width: 20rem;">
+                  <img src="<%=product.img%>" class="card-img-top" alt="item image">
+                  <span class="badge rounded-pill bg-light text-dark w-25 position-absolute translate-middle-y" style="top:41%;left:5%"><%=product.avgRating%>  &star; | <%=product.reviews.length%></span>
+                  <div class="card-body">
+                    <h5 class="card-title d-flex justify-content-between align-items-center"><span><%= product.name %></span> <a href="#" class="btn"><span><i class="far fa-heart"></i></span></a></h5>
+                    <p class="card-text fw-light"><%= product.desc%></p>
+                    <% if(product.reviews.length){ %>
+                      <p class="text-muted"><%=product.reviews.length%> reviews</p>
+                    <%}else{%>
+                      <p class="text-muted">No reviews</p>
+                    <% } %> 
+                    <h6 class="card-title"><span class="fw-lighter fs-6 text-decoration-line-through">Rs.<%= product.price %></span> Rs.<%= product.price %> <span class="fw-light fs-6 text-warning">( 50 % OFF )</span> </h6>
+                    <a href="/products/<%=product._id%>" class="btn btn-sm show-btn">View Now</a>
+                  </div>
+              </div>
+          </div>
+      <%}%>
+  </div>
+</section> -->

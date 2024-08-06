@@ -1,0 +1,166 @@
+<%- include('../partials/navbar') %>
+<%- include('../partials/flash') %>
+<% layout('layouts/boilerplate') %>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card mb-3">
+        <img src="<%= findproduct.img %>" class="card-img-top" alt="<%= findproduct.name %>">
+        <div class="card-body">
+          <h3 class="card-title"><%= findproduct.name %></h3>
+          <h5 class="card-title">Rs. <%= findproduct.price %></h5>
+          <p class="card-text"><%= findproduct.desc %></p>
+     
+          <form action="/user/<%=findproduct._id%>/add" method="POST">
+            <button type="submit" class="btn btn-primary mb-2">Add to Cart</button>
+          </form>
+    
+          <form id="paymentForm" action="/user/<%=findproduct._id%>/pay" method="POST">
+            <input type="hidden" name="amount" value="<%= findproduct.price %>">
+            <input type="hidden" name="name" value="<%= findproduct.name %>">
+            <input type="hidden" name="description" value="<%= findproduct.desc %>">
+            <button type="submit" class="btn btn-success">Buy Now</button>
+          </form>
+      
+          <a href="/products/<%= findproduct._id %>/edit" class="btn btn-secondary">Edit</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="pl-5">
+        <h1 class="mb-4">Reviews</h1>
+        <form action="/products/<%= findproduct._id %>/review" method="POST">
+     
+          <div class="form-group">
+            <fieldset class="starability-basic">
+              <legend>First rating:</legend>
+           
+            </fieldset>
+          </div>
+        
+          <div class="form-group">
+            <label for="comment">Comment</label>
+            <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
+          </div>
+          <button class="btn btn-success">Add Review</button>
+        </form>
+        <div class="mt-4">
+          <% for (let review of findproduct.reviews) { %>
+            <div class="card mb-3">
+              <div class="card-body">
+                <% if (review.createdAt) { %>
+                  <p><%= review.createdAt.toDateString() %></p>
+                <% } %>
+                <h5 class="card-title"><%= review.comment %></h5>
+                <h3>Rated element name</h3>
+                <p class="starability-result" data-rating="<%= review.rating %>">
+                  <%= review.rating %>
+                </p>
+                <button type="submit" class="btn" style="background-color: red; color: white;">Delete</button>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  const form = document.getElementById('paymentForm');
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const amount = parseFloat(form.querySelector('input[name="amount"]').value); 
+    const name = form.querySelector('input[name="name"]').value;
+    const description = form.querySelector('input[name="description"]').value;
+
+    console.log('Submitting payment form with data:', { amount, name, description });
+
+    if (isNaN(amount) || amount <= 0) {
+      alert('Please enter a valid amount');
+      return;
+    }
+
+    const response = await fetch('/createorder', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ amount, name, description })
+    });
+
+    const data = await response.json();
+    console.log('Response from server:', data);
+
+    if (data.success) {
+      const options = {
+        key: 'rzp_test_mBFX8C2tMB9Gwy',
+        amount: data.amount,
+        currency: 'INR',
+        name: data.name,
+        description: data.description,
+        order_id: data.order_id,
+        handler: function (response) {
+          alert(response.razorpay_payment_id);
+        
+        }
+      };
+      const rzp1 = new Razorpay(options);
+      rzp1.open();
+    } else {
+      alert('Error creating order');
+    }
+  });
+</script>
+
+<style>
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+
+  .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+
+  .btn-success:hover {
+    background-color: #218838;
+    border-color: #218838;
+  }
+
+  .card {
+    transition: transform 0.3s ease-in-out;
+    border-radius: 10px;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .card-text {
+    color: #6c757d;
+  }
+</style>
+
+

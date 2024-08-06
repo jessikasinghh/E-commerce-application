@@ -1,0 +1,27 @@
+<%- include('../partials/navbar') %>
+<%- include('../partials/flash') %>
+<% layout('layouts/boilerplate') %>
+
+<div class="row" style="display: flex; align-items: center; justify-content: center; margin-top: 80px;">
+    <div class="col-6">
+        <form action="/products" method="POST">
+            <div class="mb-3">
+                <label for="naam" class="form-label">Name:</label>
+                <input type="text" class="form-control" placeholder="Enter Name" id="naam" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="img" class="form-label">Image URL:</label>
+                <input type="text" class="form-control" placeholder="Enter Image URL" id="img" name="img" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Price:</label>
+                <input type="number" class="form-control" placeholder="Enter Price" id="price" name="price" required>
+            </div>
+            <div class="mb-3">
+                <label for="desc" class="form-label">Description:</label>
+                <textarea class="form-control" rows="5" placeholder="Enter Description" id="desc" name="desc" required></textarea>
+            </div>
+            <button class="btn btn-success" type="submit">Add Product</button>
+        </form>
+    </div>
+</div>
